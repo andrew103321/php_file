@@ -36,7 +36,7 @@
 <body>
  <h1 class="header">檔案上傳練習</h1>
  <!----建立你的表單及設定編碼----->
- <!-- 上傳方式必打  enctype="multipart/form-data" -->
+ <!-- 上傳檔案方式必打  enctype="multipart/form-data" -->
  <form action="upload.php" method="post" enctype="multipart/form-data">
  <!--  file 以陣列方式傳檔案 -->
   檔案：<input type="file" name="img" ><br>
