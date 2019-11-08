@@ -22,12 +22,36 @@
 <body>
 <h1 class="header">文字檔案匯入練習</h1>
 <!---建立檔案上傳機制--->
+<?php
+$dsn = "mysql:host=localhost;charset=utf8;dbname=retired";
+$pdo = new pdo($dsn,'root','');
 
+// 讀取檔案 "r"  寫檔案檔案 "w" 
+$file=fopen("台灣糖業公司_近5年退休人數.csv","r");
+$line=fgets($file);  
+// 檢查有待文件尾端嗎
+while(!feof($file)){
+  
+    $line=fgets($file);  
+    // 去除到逗號，輸出為陣列
+    $data=explode(",",$line);
+    if(count($data)>1){
+        $sql = "INSERT INTO `retire`(`id`, `year`, `num`, `pro`) 
+        VALUES (null,".$data[0].",".$data[1].",".$data[2].")";
+        echo    $sql;
+        echo "<br>";
+        $pdo->exec($sql);
+    }
+}
+
+
+
+?>
 
 
 <!----讀出匯入完成的資料----->
-
-
+<?php
+?>
 
 </body>
 </html>

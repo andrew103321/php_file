@@ -10,6 +10,7 @@ $pdo = new pdo($dsn,'root','');
 
 if(!empty($_FILES)&& $_FILES['file']['error']==0){
   
+     $desc=$_POST['desc'];
      $type =$_FILES['file']['type'];
      
   
@@ -19,14 +20,12 @@ if(!empty($_FILES)&& $_FILES['file']['error']==0){
     //  搬移檔案  move_uploaded_file (上傳檔案後的暫存資料夾位置,"要去的位置".去file陣列抓取名稱)
     move_uploaded_file($_FILES['file']['tmp_name'],$path.$filename);
     
+    $sql="insert into `files`(`name`, `type`,  `path`,`desc`
+    ) values ('$filename','$type','".$path.$filename."','$desc')";
 
+    $result = $pdo->exec($sql);
 
-    $sql="insert into `files`(`name`, `type`,  `path`) 
-    values ('$filename','$type','".$path.$filename."')";
-
-   $result = $pdo->exec($sql);
-
-   if($result=1){
+    if($result=1){
         echo "成功";
     }else{
         echo "沒有";
@@ -64,7 +63,7 @@ if(!empty($_FILES)&& $_FILES['file']['error']==0){
 <form action="manage.php" method="post" enctype="multipart/form-data">
  <!--  file 以陣列方式傳檔案 -->
   檔案：<input type="file" name="file" ><br>
- 
+  說明:<input type="text" name='desc'>
   <input type="submit" value="上傳">
 </form>
 
@@ -81,7 +80,9 @@ if(!empty($_FILES)&& $_FILES['file']['error']==0){
          <td>type</td>
          <td>path</td>
          <td>create time</td>
+         <td>說明</td>
          <td>操作</td>
+
      </tr>
 
     <?php
@@ -96,9 +97,10 @@ if(!empty($_FILES)&& $_FILES['file']['error']==0){
          <td><?=$file["type"];?></td>
          <td><?=$file["path"];?></td>
          <td><?=$file["create_time"];?>
+         <td><?=$file["desc"];?>
 
          <td ><a href="edit_file.php?id=<?=$file["id"];?>">更新檔案</a>
-               <a href="edit_file.php?id=<?=$file["id"];?>">刪除檔案</a>
+               <a href="del_file.php?id=<?=$file["id"];?>">刪除檔案</a>
          </td>
      </tr>
 

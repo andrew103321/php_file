@@ -40,7 +40,7 @@
  <form action="upload.php" method="post" enctype="multipart/form-data">
  <!--  file 以陣列方式傳檔案 -->
   檔案：<input type="file" name="img" ><br>
- 
+
   <input type="submit" value="上傳">
 </form>
 

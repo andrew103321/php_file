@@ -10,20 +10,23 @@ if(!empty($_FILES)&& $_FILES['file']['error']==0){
     $path="./upload/";
     $updateTime=date("Y-m-d H:i:s");
     //  搬移檔案  move_uploaded_file (上傳檔案後的暫存資料夾位置,"要去的位置".去file陣列抓取名稱)
-    move_uploaded_file($_FILES['file']['tmp_name'] , $path . $filename);
+    move_uploaded_file($_FILES['file']['tmp_name'] ,$path.$filename);
    
-    // 刪除黨案在更新檔案前做
+    // 刪除資料庫黨案前要先，刪除檔案區資料
     $id=$_POST['id'];
-    echo $id;
+
     $sql="select * from files where id='$id'";
     $origin=$pdo->query($sql)->fetch();
     $origin_file=$origin['path'];
+   
     unlink($origin_file);
-
+    
+    $desc=$_POST['desc'];
     //更新資料
     $sql="update files set name='$filename',type='$type',update_time='$updateTime',
-    path='" . $path . $filename . "' where id='$id'";
-
+    path='" . $path . $filename . "',`desc`= '$desc' where id='$id' ";
+    echo "<br>";
+    echo $sql;
     $result = $pdo->exec($sql);
 
     if($result=1){
@@ -33,6 +36,7 @@ if(!empty($_FILES)&& $_FILES['file']['error']==0){
         echo "沒有";
     }
 }
+
 
 // 顯示更新檔案
 $id = $_GET['id'];
@@ -61,11 +65,16 @@ $data=$pdo->query($sql)->fetch();
         <td><?=$data['type'];?></td>
     </tr>
     <tr>
+        <td>說明</td>
+        <td><input type="text" name="desc" value="<?=$data['desc'];?>"></td>
+    </tr>
+    <tr>
         <td>creat_time</td>
         <td><?=$data['create_time']?></td>
     </tr>
 </table>
    檔案更新 <input type="file" name='file' >
+
     <input type="hidden" name='id' value="<?=$data['id'];?>" >
     <input type="submit" value="更新" >
  
